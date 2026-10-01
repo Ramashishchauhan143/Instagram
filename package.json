@@ -1,0 +1,15 @@
+{
+  "name": "instagram-like-project",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Instagram-style MERN application",
+  "scripts": {
+    "dev": "concurrently -k -n API,WEB -c blue,magenta \"npm:dev:backend\" \"npm:dev:frontend\"",
+    "dev:backend": "npm --prefix backend run dev",
+    "dev:frontend": "npm --prefix frontend run dev",
+    "build": "npm --prefix frontend run build"
+  },
+  "devDependencies": {
+    "concurrently": "^9.2.1"
+  }
+}
