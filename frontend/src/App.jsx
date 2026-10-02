@@ -2,6 +2,8 @@ import { useCallback, useEffect, useState } from 'react';
 
 const TOKEN_KEY = 'instagram_token';
 
+const API_BASE_URL = 'https://instagram-puwc.onrender.com';
+
 const iconPaths = {
   home: <><path d="m3 10 9-7 9 7v10a1 1 0 0 1-1 1h-5v-7H9v7H4a1 1 0 0 1-1-1z" /><path d="M9 21v-7h6v7" /></>,
   search: <><circle cx="10.8" cy="10.8" r="6.8" /><path d="m16 16 5 5" /></>,
@@ -43,13 +45,30 @@ function getToken() {
 
 async function request(path, options = {}) {
   const headers = { ...(options.headers || {}) };
-  if (options.body) headers['Content-Type'] = 'application/json';
-  const token = getToken();
-  if (token) headers.Authorization = `Bearer ${token}`;
 
-  const response = await fetch(path, { ...options, headers });
+  if (options.body) {
+    headers['Content-Type'] = 'application/json';
+  }
+
+  const token = getToken();
+
+  if (token) {
+    headers.Authorization = `Bearer ${token}`;
+  }
+
+  const response = await fetch(`${API_BASE_URL}${path}`, {
+    ...options,
+    headers
+  });
+
   const body = await response.json().catch(() => ({}));
-  if (!response.ok) throw new Error(body.message || 'Something went wrong. Please try again.');
+
+  if (!response.ok) {
+    throw new Error(
+      body.message || 'Something went wrong. Please try again.'
+    );
+  }
+
   return body;
 }
 
